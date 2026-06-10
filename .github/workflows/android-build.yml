@@ -36,12 +36,12 @@ jobs:
       - name: Sync Capacitor Android
         run: npx cap sync android
 
-      # Setup Java 17 (required for Gradle)
+      # تم التحديث هنا: تهيئة Java 21 بدلاً من 17 ليتوافق مع متطلبات المشروع
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       # Cache Gradle dependencies
       - name: Cache Gradle
@@ -54,7 +54,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # الحل: إعطاء صلاحية التشغيل لملف gradlew قبل البدء في البناء
+      # إعطاء صلاحية التشغيل لملف gradlew
       - name: Make gradlew executable
         run: |
           cd android
