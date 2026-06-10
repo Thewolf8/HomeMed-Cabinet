@@ -54,6 +54,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      # الحل: إعطاء صلاحية التشغيل لملف gradlew قبل البدء في البناء
+      - name: Make gradlew executable
+        run: |
+          cd android
+          chmod +x gradlew
+
       # Build debug APK
       - name: Build Debug APK
         run: |
