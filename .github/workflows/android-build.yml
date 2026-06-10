@@ -36,7 +36,7 @@ jobs:
       - name: Sync Capacitor Android
         run: npx cap sync android
 
-      # تم التحديث هنا: تهيئة Java 21 بدلاً من 17 ليتوافق مع متطلبات المشروع
+      # Setup Java 21
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -53,6 +53,16 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
+      # خطوة الحل الجديدة: حقن كود لتوحيد وإصلاح تضارب مكتبات كوتلن المكررة
+      - name: Fix Kotlin Duplicate Dependencies Conflict
+        run: |
+          echo "" >> android/app/build.gradle
+          echo "configurations.all {" >> android/app/build.gradle
+          echo "    resolutionStrategy {" >> android/app/build.gradle
+          echo "        forcedModules = ['org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22', 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22']" >> android/app/build.gradle
+          echo "    }" >> android/app/build.gradle
+          echo "}" >> android/app/build.gradle
 
       # إعطاء صلاحية التشغيل لملف gradlew
       - name: Make gradlew executable
